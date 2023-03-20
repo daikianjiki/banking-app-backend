@@ -14,10 +14,17 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MoneyAccount {
+    public enum AccountType {
+        Checking,
+        Savings
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long accountId;
     public Long balance;
+
+    @Enumerated(EnumType.STRING)
+    public AccountType accountType;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonBackReference

@@ -11,11 +11,21 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Transaction {
+
+    public enum TransactionType {
+        Deposit,
+        Withdraw
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long transactionId;
     public Double amount;
     public Long timestamp;
+    public String description;
+    public Double settledBalance;
+
+    @Enumerated(EnumType.STRING)
+    public TransactionType transactionType;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonBackReference

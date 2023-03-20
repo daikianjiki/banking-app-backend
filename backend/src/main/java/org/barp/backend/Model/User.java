@@ -20,7 +20,7 @@ public class User {
     public String username;
     public String password;
     public String email;
-    public String phoneNumber;
+    public Integer phoneNumber;
     public String streetAddress1;
     public String streetAddress2;
     public String city;

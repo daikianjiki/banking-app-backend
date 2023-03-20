@@ -16,4 +16,8 @@ public class Transaction {
     public Long transactionId;
     public Double amount;
     public Long timestamp;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonBackReference
+    public MoneyAccount moneyAccount;
 }

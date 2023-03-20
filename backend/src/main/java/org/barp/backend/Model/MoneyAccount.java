@@ -1,6 +1,7 @@
 package org.barp.backend.Model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,4 +19,11 @@ public class MoneyAccount {
     public Long accountId;
     public Long balance;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonBackReference
+    public User user;
+
+    @OneToMany(mappedBy = "moneyAccount", cascade = {CascadeType.DETACH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    @JsonManagedReference
+    public List<Transaction> transactions;
 }

@@ -1,6 +1,5 @@
 package org.barp.backend.Model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -19,6 +18,7 @@ public class User {
     public Long userId;
     public String username;
     public String password;
+    @Column(unique=true)
     public String email;
     public Integer phoneNumber;
     public String streetAddress1;
@@ -29,9 +29,8 @@ public class User {
     public String zipCode;
     @OneToMany(mappedBy = "user", cascade = {CascadeType.DETACH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     @JsonManagedReference
-    public List<MoneyAccount> moneyAccounts;
+    public List<MoneyAccount> moneyAccount;
 
     @OneToOne(mappedBy = "user", cascade = {CascadeType.DETACH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
-    @JsonManagedReference
     public VerificationKey verificationKey;
 }

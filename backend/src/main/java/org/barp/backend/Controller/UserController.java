@@ -4,6 +4,7 @@ import org.barp.backend.Model.User;
 import org.barp.backend.Service.ServiceResult;
 import org.barp.backend.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public class UserController {
     @Autowired
     UserController(UserService userService){this.userService = userService;}
     @GetMapping("user")
-    public ServiceResult<List<User>> getAllUsers() { return this.userService.getAllUsers(); }
+    public ResponseEntity<List<User>> getAllUsers() { return this.userService.getAllUsers(); }
     @PostMapping("user")
-    public ServiceResult<User> addNewUser(@RequestBody User user) { return this.userService.addUser(user); }
+    public ResponseEntity<?> addNewUser(@RequestBody User user) { return this.userService.addUser(user); }
 }

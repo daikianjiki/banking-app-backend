@@ -1,6 +1,5 @@
 package org.barp.backend.Service;
 
-import org.barp.backend.Model.MoneyAccount;
 import org.barp.backend.Model.User;
 import org.barp.backend.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

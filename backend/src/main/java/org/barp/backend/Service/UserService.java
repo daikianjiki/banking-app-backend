@@ -125,4 +125,13 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error occurred while deleting user");
         }
     }
+    public User patchUserById(long id, User user) {
+        User user1 =  userRepository.findById(id).get();
+        user1.setUsername(user.getUsername());
+        user1.setPassword(user.getPassword());
+        user1.setEmail(user.getEmail());
+        user1.setPhoneNumber(user.getPhoneNumber());
+        userRepository.save(user1);
+        return user1;
+    }
 }

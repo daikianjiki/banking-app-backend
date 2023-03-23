@@ -20,4 +20,6 @@ public class UserController {
     public ResponseEntity<List<User>> getAllUsers() { return this.userService.getAllUsers(); }
     @PostMapping("user")
     public ResponseEntity<?> addNewUser(@RequestBody User user) { return this.userService.addUser(user); }
+    @PatchMapping("user/{id}")
+    public User patchUserById(@RequestBody User user, @PathVariable("id") long id) {return this.userService.patchUserById(id, user);}
 }

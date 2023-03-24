@@ -20,4 +20,7 @@ public class UserController {
     public ResponseEntity<List<User>> getAllUsers() { return this.userService.getAllUsers(); }
     @PostMapping("user")
     public ResponseEntity<?> addNewUser(@RequestBody User user) { return this.userService.addUser(user); }
+
+    @PostMapping("login")
+    public ResponseEntity<?> loginUser(@RequestBody User user) {return this.userService.loginUser(user); }
 }

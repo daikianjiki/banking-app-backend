@@ -125,4 +125,23 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error occurred while deleting user");
         }
     }
+
+    public ResponseEntity<?> loginUser(User user) {
+        try {
+            return new ResponseEntity<User>(
+                    this.userRepository.findUserByUsernameAndPassword(
+                            user.getUsername(),
+                            user.getPassword()).orElseThrow(
+                                    () -> new ResponseStatusException(
+                                            HttpStatus.NOT_FOUND,
+                                            "Username/pass combo does not exist"
+                                    )
+                    ),
+                    HttpStatus.OK
+            );
+        } catch (Exception e){
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error occurred during login");
+        }
+    }
 }

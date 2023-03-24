@@ -23,4 +23,8 @@ public class UserController {
 
     @PostMapping("login")
     public ResponseEntity<?> loginUser(@RequestBody User user) {return this.userService.loginUser(user); }
+
+    @PatchMapping("user/{id}")
+    public ResponseEntity<?> patchUserById(@RequestBody User user, @PathVariable("id") long id) {return this.userService.patchUserById(id, user);}
+
 }

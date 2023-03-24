@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.swing.text.html.parser.Entity;
 import java.util.List;
 import java.util.Optional;
 
@@ -143,5 +144,15 @@ public class UserService {
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error occurred during login");
         }
+    }
+    public ResponseEntity<?> patchUserById(long id, User user) {
+        User user1 =  userRepository.findById(id).get();
+        user1.setUsername(user.getUsername());
+        user1.setPassword(user.getPassword());
+        user1.setEmail(user.getEmail());
+        user1.setPhoneNumber(user.getPhoneNumber());
+        userRepository.save(user1);
+        return new ResponseEntity<>(user1, HttpStatus.OK) ;
+
     }
 }

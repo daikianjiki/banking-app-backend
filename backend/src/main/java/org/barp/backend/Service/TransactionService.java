@@ -169,7 +169,7 @@ public class TransactionService {
 
         // handle funds
         account.setBalance(account.getBalance() + amount);
-        transaction.setSettledBalance(account.getBalance() + amount);
+        transaction.setSettledBalance(account.getBalance());
 
         this.moneyAccountRepository.save(account);
         this.TransactionRepository.save(transaction);
@@ -215,7 +215,7 @@ public class TransactionService {
 
         // handle funds
         account.setBalance(account.getBalance() - amount);
-        transaction.setSettledBalance(account.getBalance() - amount);
+        transaction.setSettledBalance(account.getBalance());
 
         this.moneyAccountRepository.save(account);
         this.TransactionRepository.save(transaction);

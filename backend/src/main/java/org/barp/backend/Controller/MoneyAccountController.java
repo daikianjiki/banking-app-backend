@@ -19,4 +19,6 @@ public class MoneyAccountController {
     public ResponseEntity<List<MoneyAccount>> getAllMoneyAccounts() { return this.MoneyAccountService.getAllMoneyAccounts(); }
     @PostMapping("account")
     public ResponseEntity<?> addNewMoneyAccount(@RequestBody MoneyAccount MoneyAccount) { return this.MoneyAccountService.addMoneyAccount(MoneyAccount); }
+    @GetMapping("account/user/{userId}")
+    public ResponseEntity<List<MoneyAccount>> getAllMoneyAccountsByUser(@PathVariable Long userId) { return this.MoneyAccountService.getMoneyAccountByUserId(userId); }
 }

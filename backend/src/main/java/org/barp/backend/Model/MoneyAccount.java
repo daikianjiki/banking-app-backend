@@ -29,13 +29,14 @@ public class MoneyAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long accountId;
-    public Long balance;
+    public Double balance;
 
     @Enumerated(EnumType.STRING)
     public AccountType accountType;
 
+    @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.EAGER)
-    @JsonBackReference
+    @JsonBackReference(value = "MoneyAccountToUser")
     public User user;
 
     /**
@@ -54,6 +55,6 @@ public class MoneyAccount {
      * Deleting a transaction removes the reference to it in the MoneyAccount table.
      */
     @OneToMany(mappedBy = "moneyAccount", cascade = {CascadeType.DETACH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
-    @JsonManagedReference
+    //@JsonManagedReference(value = "MoneyAccountToTransaction")
     public List<Transaction> transactions;
 }

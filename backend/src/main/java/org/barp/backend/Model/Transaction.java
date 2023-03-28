@@ -27,6 +27,7 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     public TransactionType transactionType;
 
+    @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonBackReference
     public MoneyAccount moneyAccount;

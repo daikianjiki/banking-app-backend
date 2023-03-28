@@ -1,7 +1,11 @@
 package org.barp.backend.Service;
 
+import jakarta.transaction.Transactional;
+import org.barp.backend.Model.MoneyAccount;
 import org.barp.backend.Model.Transaction;
+import org.barp.backend.Repository.MoneyAccountRepository;
 import org.barp.backend.Repository.TransactionRepository;
+import org.barp.backend.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -16,10 +20,14 @@ import java.util.Optional;
 public class TransactionService {
 
     TransactionRepository TransactionRepository;
+    UserRepository userRepository;
+    MoneyAccountRepository moneyAccountRepository;
 
     @Autowired
-    TransactionService(TransactionRepository TransactionRepository){
+    TransactionService(TransactionRepository TransactionRepository, UserRepository userRepository, MoneyAccountRepository moneyAccountRepository){
         this.TransactionRepository = TransactionRepository;
+        this.userRepository = userRepository;
+        this.moneyAccountRepository = moneyAccountRepository;
     }
     public ResponseEntity<List<Transaction>> getAllTransactions()
     {
@@ -60,7 +68,7 @@ public class TransactionService {
             return new ResponseEntity<>(this.TransactionRepository.save(Transaction), HttpStatus.OK);
         } catch (DataIntegrityViolationException e) {
             e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "That Transaction already exists");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Data integrity error");
         } catch (Exception e){
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error occurred deleting Transaction");
@@ -125,6 +133,94 @@ public class TransactionService {
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error occurred while deleting Transaction");
         }
+    }
+
+    // transactional ensures changes occur within an SQL transaction
+    @Transactional
+    public ResponseEntity<?> newDeposit(Transaction transaction) {
+        double amount = transaction.getAmount();
+        long accountId;
+        Transaction.TransactionType type;
+
+        // check if transaction information is properly set
+        try {
+            accountId = transaction.getMoneyAccount().getAccountId();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing: the money account is missing in the request");
+        }
+
+        try {
+            type = transaction.getTransactionType();
+            if (type != Transaction.TransactionType.Deposit) throw new Exception("Deposit transaction type expected");
+        } catch (Exception e){
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid transaction type");
+        }
+
+        // ensure account exists
+        var account = this.moneyAccountRepository.findById(accountId).orElseThrow(() -> {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "That account does not exist");
+        });
+
+        // create new transaction
+        transaction.setMoneyAccount(account);
+        transaction.setAmount(amount);
+
+        // handle funds
+        account.setBalance(account.getBalance() + amount);
+        transaction.setSettledBalance(account.getBalance() + amount);
+
+        this.moneyAccountRepository.save(account);
+        this.TransactionRepository.save(transaction);
+
+        return new ResponseEntity<>(transaction, HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> newWithdrawal(Transaction transaction) {
+        double amount = transaction.getAmount();
+        long accountId;
+        Transaction.TransactionType type;
+
+        // check if transaction information is properly set
+        try {
+            accountId = transaction.getMoneyAccount().getAccountId();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing: the money account is missing in the request");
+        }
+
+        try {
+            type = transaction.getTransactionType();
+            if (type != Transaction.TransactionType.Withdraw) throw new Exception("Withdraw transaction type expected");
+        } catch (Exception e){
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid transaction type");
+        }
+
+        // ensure account exists
+        var account = this.moneyAccountRepository.findById(accountId).orElseThrow(() -> {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "That account does not exist");
+        });
+
+
+        // make sure enough funds exist in account
+        if (account.getBalance() - amount < 0) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not enough funds");
+        }
+
+        // create new transaction
+        transaction.setMoneyAccount(account);
+        transaction.setAmount(amount);
+
+        // handle funds
+        account.setBalance(account.getBalance() - amount);
+        transaction.setSettledBalance(account.getBalance() - amount);
+
+        this.moneyAccountRepository.save(account);
+        this.TransactionRepository.save(transaction);
+
+        return new ResponseEntity<>(transaction, HttpStatus.OK);
     }
 }
 

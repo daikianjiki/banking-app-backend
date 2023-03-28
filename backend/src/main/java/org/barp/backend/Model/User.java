@@ -28,7 +28,7 @@ public class User {
     public String country;
     public String zipCode;
     @OneToMany(mappedBy = "user", cascade = {CascadeType.DETACH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
-    @JsonManagedReference
+    //@JsonManagedReference
     public List<MoneyAccount> moneyAccount;
 
     @OneToOne(mappedBy = "user", cascade = {CascadeType.DETACH, CascadeType.REMOVE}, fetch = FetchType.EAGER)

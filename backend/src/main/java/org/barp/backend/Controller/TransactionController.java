@@ -19,4 +19,10 @@ public class TransactionController {
     public ResponseEntity<List<Transaction>> getAllTransactions() { return this.TransactionService.getAllTransactions(); }
     @PostMapping("Transaction")
     public ResponseEntity<?> addNewTransaction(@RequestBody Transaction Transaction) { return this.TransactionService.addTransaction(Transaction); }
+
+    @PostMapping("Transaction/deposit")
+    public ResponseEntity<?> newDeposit(@RequestBody Transaction transaction) { return this.TransactionService.newDeposit(transaction); }
+    @PostMapping("Transaction/withdraw")
+    public ResponseEntity<?> newWithdrawal(@RequestBody Transaction transaction) { return this.TransactionService.newWithdrawal(transaction); }
+
 }

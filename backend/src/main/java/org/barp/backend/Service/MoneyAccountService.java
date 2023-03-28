@@ -125,4 +125,19 @@ public class MoneyAccountService {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error occurred while deleting MoneyAccount");
         }
     }
+
+    public ResponseEntity<List<MoneyAccount>> getMoneyAccountByUserId(Long accountId) {
+        try {
+            Optional<List<MoneyAccount>> MoneyAccount = this.MoneyAccountRepository.findMoneyAccountByUserUserId(accountId);
+            if(MoneyAccount.isPresent())
+            {
+                return new ResponseEntity<>(MoneyAccount.get(), HttpStatus.OK);
+            } else {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "That MoneyAccount {"+accountId+"} does not exist");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error occurred while getting MoneyAccount by id");
+        }
+    }
 }

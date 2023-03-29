@@ -20,7 +20,7 @@ public class User {
     public String password;
     @Column(unique=true)
     public String email;
-    public Integer phoneNumber;
+    public Long phoneNumber;
     public String streetAddress1;
     public String streetAddress2;
     public String city;

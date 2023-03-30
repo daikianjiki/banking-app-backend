@@ -163,8 +163,13 @@ public class TransactionService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "That account does not exist");
         });
 
+        var user = this.userRepository.findByMoneyAccount(account).orElseThrow(() -> {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Failed transaction. The account does not belong to a user");
+        });
+
         // create new transaction
         transaction.setMoneyAccount(account);
+        transaction.setUser(user);
         transaction.setAmount(amount);
 
         // handle funds
@@ -203,6 +208,9 @@ public class TransactionService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "That account does not exist");
         });
 
+        var user = this.userRepository.findByMoneyAccount(account).orElseThrow(() -> {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Failed transaction. The account does not belong to a user");
+        });
 
         // make sure enough funds exist in account
         if (account.getBalance() - amount < 0) {
@@ -211,7 +219,9 @@ public class TransactionService {
 
         // create new transaction
         transaction.setMoneyAccount(account);
+        transaction.setUser(user);
         transaction.setAmount(amount);
+
 
         // handle funds
         account.setBalance(account.getBalance() - amount);
@@ -221,6 +231,12 @@ public class TransactionService {
         this.TransactionRepository.save(transaction);
 
         return new ResponseEntity<>(transaction, HttpStatus.OK);
+    }
+
+    public ResponseEntity<List<Transaction>> findTransactionsByUserId(Long userId){
+        var output = this.TransactionRepository.findTransactionsByUserUserId(userId);
+
+        return new ResponseEntity<>(output, HttpStatus.OK);
     }
 }
 

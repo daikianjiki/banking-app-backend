@@ -30,7 +30,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = {CascadeType.DETACH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     //@JsonManagedReference
     public List<MoneyAccount> moneyAccount;
-
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.DETACH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    //@JsonManagedReference
+    public List<Transaction> transactions;
     @OneToOne(mappedBy = "user", cascade = {CascadeType.DETACH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     public VerificationKey verificationKey;
 }

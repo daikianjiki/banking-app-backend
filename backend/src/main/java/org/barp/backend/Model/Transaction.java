@@ -29,6 +29,11 @@ public class Transaction {
 
     @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.EAGER)
-    @JsonBackReference
+    @JsonBackReference(value = "TransactionToMoneyAccount")
     public MoneyAccount moneyAccount;
+
+    @JoinColumn(nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonBackReference(value = "TransactionToUser")
+    public User user;
 }

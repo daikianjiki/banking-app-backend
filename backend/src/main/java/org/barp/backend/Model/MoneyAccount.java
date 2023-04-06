@@ -58,3 +58,5 @@ public class MoneyAccount {
     //@JsonManagedReference(value = "MoneyAccountToTransaction")
     public List<Transaction> transactions;
 }
+
+

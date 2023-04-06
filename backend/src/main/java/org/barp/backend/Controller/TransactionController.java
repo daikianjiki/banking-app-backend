@@ -12,7 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Map;
 
-@CrossOrigin(origins = {"http://localhost:4200"}, allowCredentials = "true")
+@CrossOrigin(origins = {"http://54.176.20.91:4200"}, allowCredentials = "true")
 @RestController
 public class TransactionController {
     TransactionService TransactionService;

@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-//@CrossOrigin(origins = {"http://54.176.20.91:4200"}, allowCredentials = "true")
-@CrossOrigin("*")
+@CrossOrigin(origins = {"http://3.101.140.91:4200"}, allowCredentials = "true")
+//@CrossOrigin("*")
 @RestController
 public class VerificationKeyController {
     VerificationKeyService VerificationKeyService;
